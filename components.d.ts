@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Copy: typeof import('./src/components/Copy.vue')['default']
     Draft: typeof import('./src/components/draft.vue')['default']
     DraftForm: typeof import('./src/components/DraftForm.vue')['default']
     EditForm: typeof import('./src/components/EditForm.vue')['default']
@@ -18,6 +19,7 @@ declare module 'vue' {
     ElFor: typeof import('element-plus/es')['ElFor']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMe: typeof import('element-plus/es')['ElMe']
     ElMenu: typeof import('element-plus/es')['ElMenu']
@@ -25,10 +27,17 @@ declare module 'vue' {
     ElOption: typeof import('element-plus/es')['ElOption']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    ElUpload: typeof import('element-plus/es')['ElUpload']
     Form: typeof import('./src/components/Form.vue')['default']
     PersonForm: typeof import('./src/components/PersonForm.vue')['default']
+    PortraitData: typeof import('./src/components/PortraitData.vue')['default']
+    Recruit: typeof import('./src/components/RecruitForm.vue')['default']
+    RecruitForm: typeof import('./src/components/RecruitForm.vue')['default']
+    ResponseJob: typeof import('./src/components/ResponseJob.vue')['default']
+    Result: typeof import('./src/components/Result.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TestForm: typeof import('./src/components/TestForm.vue')['default']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }

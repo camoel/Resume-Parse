@@ -1,59 +1,65 @@
 <template>
-  <div class="container">
+  <div v-if="!dataShow" class="container">
     <div class="search">
       <div class="title">
         <img src="../../assets/logo.png" alt="logo" />
         <h1>智能人才搜索</h1>
       </div>
-      <input type="text" />
-       <div class="suggestion">
-      <div class="rolling-div">
-        <div class="rolling-text">热门搜索：</div>
-        <div class="rolling-suggestion">
+      <input type="text" v-model="inputValue" @keydown.enter="showData" />
+      <div class="suggestion">
+        <div class="rolling-div">
+          <div class="rolling-text">热门搜索：</div>
+          <div class="rolling-suggestion">
             <span v-for="(item, index) in items" :key="index" v-show="currentIndex === index">
               {{ item }}
             </span>
+          </div>
         </div>
       </div>
     </div>
-    </div>
-   
   </div>
+  <SearchData v-else />
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from "vue";
-const input = ref("");
-const items=[
-      '人力资源经理',
-      '酒店大堂经理',
-      '金融科技分析师',
-      '统计学',
-      '法律顾问',
-      '行政专员',
-      '国信证券'
-    
+import SearchData from "./SearchData.vue";
+
+const inputValue = ref("");
+const items = [
+  '人力资源经理',
+  '酒店大堂经理',
+  '金融科技分析师',
+  '统计学',
+  '法律顾问',
+  '行政专员',
+  '国信证券'
 ];
 const currentIndex = ref(0);
-    let interval: number;
+let interval: number;
 
-    const startRolling = () => {
-      interval = window.setInterval(() => {
-        currentIndex.value = (currentIndex.value + 1) % items.length;
-      }, 2000);
-    };
+const startRolling = () => {
+  interval = window.setInterval(() => {
+    currentIndex.value = (currentIndex.value + 1) % items.length;
+  }, 2000);
+};
 
-    onMounted(() => {
-      startRolling();
-    });
+onMounted(() => {
+  startRolling();
+});
 
-    onUnmounted(() => {
-      clearInterval(interval);
-    });
+onUnmounted(() => {
+  clearInterval(interval);
+});
 
+const dataShow = ref(false);
 
+function showData() {
+  if (inputValue.value.trim() !== "") {
+    dataShow.value = true;
+  }
+}
 </script>
-
 <style scoped>
 .container {
   width: 100%;

@@ -1,5 +1,6 @@
 <template>
-  <form @submit.prevent="submitForm" @reset="handleReset" class="form-container">
+  <div class="form">
+   <form @submit.prevent="submitForm" @reset="handleReset" class="form-container">
     <h2>基本信息</h2>
     
     <div class="form-group">
@@ -278,13 +279,17 @@
       </div>
     </div>
     
-    <button type="submit" class="btn btn-success">提交</button>
+    <button type="submit" class="btn btn-success" >保存</button>
     <button type="reset" class="btn btn-secondary">重置</button>
   </form>
+  </div>
+ 
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
+import { ElMessage } from 'element-plus';
+import axios from '../api/request';
 
 export default defineComponent({
   name: 'ResumeForm',
@@ -485,48 +490,53 @@ export default defineComponent({
     };
 
 
-     const errors = reactive({
-      telephone: ''
+ const errors = reactive({
+  telephone: ''
+});
+
+const validateForm = () => {
+  errors.telephone = ''; // 清除之前的错误信息
+  const phone = formData.个人信息.电话;
+  if (phone.length !== 11 || !/^\d{11}$/.test(phone)) {
+    errors.telephone = '电话必须是 11 位数字';
+    return false;
+  }
+  return true;
+};
+
+  const submitForm = async () => {
+  if (!validateForm()) {
+    return; // 验证失败则阻止表单提交
+  }
+
+  try {
+    console.log('Submitting form:', formData); // 调试：检查要提交的数据
+    const response = await axios.post('/resumes/formResume', formData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
-    const validateForm = () => {
-      errors.telephone = ''; // Clear previous errors
-      const phone = formData.个人信息.电话;
-      if (phone.length !== 11 || !/^\d{11}$/.test(phone)) {
-        errors.telephone = '电话必须是 11 位数字';
-        return false;
-      }
-      return true;
-    };
-
-
-
-  const submitForm = () => {
-      if (!validateForm()) {
-        return; // Prevent form submission if validation fails
-      }
-
-      fetch('https://your-backend-endpoint.com/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-      .then(response => response.json())
-      .then(data => {
-        alert('提交成功!');
-      })
-      .catch(error => {
-        console.error('提交失败:', error);
-      });
-    };
+    // 处理响应数据
+    console.log('Response:', response.data); // 调试：检查响应数据
+    ElMessage({
+      message: '提交成功',
+      type: 'success',
+    });
+  } catch (error) {
+    console.error('Submission error:', error); // 调试：检查错误信息
+    ElMessage.error('提交失败');
+  }
+};
 
       const handleReset = (event: Event) => {
       // 额外的重置操作，例如：
       // - 显示提示消息
       // - 重置特定的状态
-      console.log('表单已重置');
+      ElMessage({
+    message: '重置成功',
+    type: 'success',
+  });
     };
 
 
@@ -558,14 +568,20 @@ export default defineComponent({
       addCertificate,
       removeCertificate,
       handleReset,
-      errors
+      errors,
+      
     };
   }
 });
 </script>
 
 <style scoped>
-
+.form{
+   background-image: url('../assets/img/background.png'),url('../assets/img/blue.png');
+  background-position: top center, bottom center; /* 设置背景图片的位置 */
+  background-size: contain, contain; /* 设置背景图片的大小 */
+  background-repeat: no-repeat, no-repeat; /* 设置背景图片是否重复 */
+}
 .form-control {
   border: 1px solid #ced4da;
   border-radius: 4px;
@@ -600,17 +616,20 @@ export default defineComponent({
 .form-container {
   max-width: 720px;
   margin: 0 auto;
+  margin-top:80px;
   padding: 40px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ 
+  
 }
 
 h2 {
   border-bottom: 2px solid #007bff;
   padding-bottom: 10px;
   margin-bottom: 20px;
-  color: #333;
+  color: #32325d;
 }
 
 .form-group {
@@ -635,9 +654,9 @@ h2 {
   transition: border-color 0.3s ease;
 }
 
-input[type="date"]::-webkit-datetime-edit {
-  color: transparent; /* 对 WebKit 浏览器隐藏占位符 */
-}
+/* input[type="date"]::-webkit-datetime-edit {
+  color: transparent; //对 WebKit 浏览器隐藏占位符 
+} */
 
 .form-group input:focus,
 .form-group select:focus {
@@ -673,18 +692,20 @@ input[type="date"]::-webkit-datetime-edit {
 .btn-success {
   background-color: #6772E5;
   margin-right: 50px;
-    border:none;
+  border:none;
 
 }
 .btn-secondary{
   background-color: #6772E5;
-    border:none;
+  border:none;
 
 }
 .btn-primary:hover, .btn-danger:hover, .btn-success:hover, .btn-secondary:hover {
   background-color: darken(10%);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
-
+button:hover {
+  background:  #7795f8;
+}
 
 </style>

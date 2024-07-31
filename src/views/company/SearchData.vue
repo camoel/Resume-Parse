@@ -11,41 +11,38 @@
         <div class="result">
           <div class="candidate-single">
             <div class="portrait">
-              <div><img src="../../assets/img/girl.png" alt="" height="70" width="70"/></div>
+              <img src="../../assets/img/girl.png" alt="portrait" height="70" width="70"/>
             </div>
             <div class="info">
-            <div class="basic">
-            <h1>name</h1></div>
-            <h4><span>|</span>job</h4>
-            <div class="erp">
-            <img src="" alt="" height="18px" width="18px">
-            <h4><span>|</span>company</h4>
-            <h4><span>|</span>job</h4>
-            
+              <div class="basic">
+                <h1>name</h1>
+              </div>
+              <h4><span>|</span>job</h4>
+              <div class="erp">
+                <img src="" alt="company logo" height="18px" width="18px">
+                <h4><span>|</span>company</h4>
+                <h4><span>|</span>job</h4>
+              </div>
+              <div class="erp">
+                <img src="" alt="school logo" height="18px" width="18px">
+                <h4><span>|</span>school</h4>
+                <h4><span>|</span>period</h4>
+                <h4><span>|</span>major</h4>
+              </div>
+              <div class="skills">
+                <span>
+                  <span class="tag"></span>
+                  <span style="color:rgb(103,114,229);">...</span>
+                </span>
+              </div>
             </div>
-            <div class="erp">
-            <img src="" alt="" height="18px" width="18px">
-            <h4><span>|</span>school</h4>
-            <h4><span>|</span>period</h4>
-            <h4><span>|</span>major</h4>
-            
-            </div>
-            <div class="skills">
-            <span>
-            <span class="tag"></span>
-            <span style="color:rgb(103,114,229);">...</span>
-            
-            </span>
-            
-            </div>
-            </div>
-            
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script lang="ts" setup></script>
 

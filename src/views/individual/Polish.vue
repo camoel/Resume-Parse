@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <template v-if="!formShow"> <div class="container">
     <div class="top"></div>
     <div class="center">
       <h1>智能简历润色</h1>
@@ -36,43 +36,41 @@
             ></path>
           </svg>
 
-            <!-- 新的 SVG 路径 -->
-
-            <svg
+          <!-- 新的 SVG 路径 -->
+          <svg
             v-if="selectedFile"
-              t="1721730490575"
-              class="new-icon"
-              viewBox="0 0 1024 1024"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              p-id="20994"
-              width="200"
-              height="200"
-            >
-              <path d="M0 0h1024v1024H0z" fill="#FFFFFF" p-id="20995"></path>
-              <path
-                d="M859.008 980.608H164.992a34.56 34.56 0 0 1-34.56-34.56V77.952a34.56 34.56 0 0 1 34.56-34.56H614.4a34.304 34.304 0 0 1 23.808 9.472L883.2 285.696a34.432 34.432 0 0 1 10.752 25.6v634.752a34.56 34.56 0 0 1-34.944 34.56zM199.552 911.36h624.896V325.632L600.32 112.64H199.552z"
-                fill="#7B85E8"
-                p-id="20996"
-                data-spm-anchor-id="a313x.search_index.0.i31.22ad3a81FVkBFu"
-                class=""
-              ></path>
-              <path
-                d="M277.376 380.288h469.12v69.248H277.376zM277.376 512h469.12v69.248H277.376zM277.376 648.32h469.12v69.248H277.376zM594.688 778.624h151.936v69.248H594.688zM272.384 220.032h234.624v69.248H272.384z"
-                fill="#a9aff2"
-                p-id="20997"
-                data-spm-anchor-id="a313x.search_index.0.i33.22ad3a81FVkBFu"
-                class=""
-              ></path>
-              <path
-                d="M851.968 345.6H614.4a34.304 34.304 0 0 1-24.576-10.24 34.688 34.688 0 0 1-10.112-24.576l1.408-233.088a34.56 34.56 0 0 1 58.88-24.32l236.288 232.704a34.688 34.688 0 0 1-24.32 59.52zM648.96 276.096H768l-117.76-115.968z"
-                fill="#7B85E8"
-                p-id="20998"
-                data-spm-anchor-id="a313x.search_index.0.i32.22ad3a81FVkBFu"
-                class=""
-              ></path>
-            </svg>
-
+            t="1721730490575"
+            class="new-icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="20994"
+            width="200"
+            height="200"
+          >
+            <path d="M0 0h1024v1024H0z" fill="#FFFFFF" p-id="20995"></path>
+            <path
+              d="M859.008 980.608H164.992a34.56 34.56 0 0 1-34.56-34.56V77.952a34.56 34.56 0 0 1 34.56-34.56H614.4a34.304 34.304 0 0 1 23.808 9.472L883.2 285.696a34.432 34.432 0 0 1 10.752 25.6v634.752a34.56 34.56 0 0 1-34.944 34.56zM199.552 911.36h624.896V325.632L600.32 112.64H199.552z"
+              fill="#7B85E8"
+              p-id="20996"
+              data-spm-anchor-id="a313x.search_index.0.i31.22ad3a81FVkBFu"
+              class=""
+            ></path>
+            <path
+              d="M277.376 380.288h469.12v69.248H277.376zM277.376 512h469.12v69.248H277.376zM277.376 648.32h469.12v69.248H277.376zM594.688 778.624h151.936v69.248H594.688zM272.384 220.032h234.624v69.248H272.384z"
+              fill="#a9aff2"
+              p-id="20997"
+              data-spm-anchor-id="a313x.search_index.0.i33.22ad3a81FVkBFu"
+              class=""
+            ></path>
+            <path
+              d="M851.968 345.6H614.4a34.304 34.304 0 0 1-24.576-10.24 34.688 34.688 0 0 1-10.112-24.576l1.408-233.088a34.56 34.56 0 0 1 58.88-24.32l236.288 232.704a34.688 34.688 0 0 1-24.32 59.52zM648.96 276.096H768l-117.76-115.968z"
+              fill="#7B85E8"
+              p-id="20998"
+              data-spm-anchor-id="a313x.search_index.0.i32.22ad3a81FVkBFu"
+              class=""
+            ></path>
+          </svg>
         </div>
         <p v-if="!selectedFile" class="p1">点击&nbsp;或&nbsp;拖拽</p>
         <p v-if="!selectedFile" class="p2">即可上传简历文件</p>
@@ -85,24 +83,26 @@
 
       <p></p>
 
-      <button class="common-button common-button-disabled" @mouseenter="hoverHandler" @click="showFormHandler">填写简历</button>
+      <button
+        class="common-button common-button-disabled"
+        @mouseenter="hoverHandler"
+        @click="showForm"
+      >
+        填写简历
+      </button>
     </div>
-  </div>
-  <div class="dark-overlay" v-if="showForm" @click="showForm = false"></div>
-  <div class="form-popup" v-if="showForm">
-    <!-- 这里添加您的表单内容 -->
-    <h2>填写简历表单</h2>
-    <input type="text" placeholder="姓名" />
-    <input type="email" placeholder="邮箱" />
-    <!-- 其他表单字段 -->
-    <button class="keep">保存</button>
-    <button @click="showForm = false"class="close"  >关闭</button>
-    
-  </div>
+  </div></template>
+ 
+
+ <template v-else> <PersonForm /></template>
+
+
+ 
 </template>
 
 <script setup>
 import  "../../assets/main.css";
+import PersonForm from "@/components/PersonForm.vue";
 import { ref } from "vue";
 
 const selectedFile = ref(null);
@@ -135,10 +135,9 @@ function handleFileChange(e) {
   }
 }
 
-const showForm = ref(false);
-
-function showFormHandler() {
-  showForm.value = true;
+const formShow = ref(false)
+function showForm() {
+  formShow.value = true
 }
 
 function hoverHandler() {
@@ -152,35 +151,6 @@ function hoverHandler() {
 </script>
 
 <style scoped>
-.form-popup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  border: 1px solid black;
-  z-index: 999;
-
-  /* 自定义表单样式 */
-  width: 400px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.dark-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 998;
-  display: none;
-}
-
-.dark-overlay.show {
-  display: block;
-}
 
 .file-name {
   color: #32325d;
@@ -268,6 +238,9 @@ svg {
 
 button {
   border: none;
+}
+button:hover {
+  background: #7795f8;
 }
 
 .keep {

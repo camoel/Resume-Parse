@@ -41,11 +41,31 @@ const router = createRouter({
           name: 'SearchData',
           component: () => import('../views/company/SearchData.vue'),
         },
+         {
+          path: '/search',
+          name: 'Search',
+          component: () => import('../views/company/Search.vue'),
+        },
         {
          path: '/personForm',
           name: 'PersonForm',
           component: () => import('../components/PersonForm.vue'),
         },
+        {
+         path: '/recruitForm',
+          name: 'RecruitForm',
+          component: () => import('../views/company/RecruitForm.vue'),
+        },
+        {
+         path: '/portrait',
+          name: 'Portrait',
+          component: () => import('../views/company/Portrait.vue'),
+        },
+        {
+          path:'/testForm',
+          name:'TestForm',
+          component:()=>import('../components/TestForm.vue')
+        }
     ]})
     
 

@@ -1,9 +1,6 @@
 <template>
-  <!-- 最外层的大盒子 -->
   <div class="bigBox">
-    <!-- 最外层的大盒子 -->
     <div class="box">
-      <!-- 滑动盒子 -->
       <div class="pre-box" ref="preRef" :style="preBoxStyle">
         <h1>WELCOME</h1>
         <p>JOIN US!</p>
@@ -11,70 +8,119 @@
           <img :src="flag ? imgList[1] : imgList[0]" alt="" />
         </div>
       </div>
-      <!-- 注册盒子 -->
       <div class="register-form">
-        <!-- 标题盒子 -->
         <div class="title-box">
           <h1>注册</h1>
         </div>
-        <!-- 输入框盒子 -->
-        <el-form ref="RegisterFormRef" :model="RegisterForm" :rules="rules" label-width="5px">
-          <el-form-item prop="username" label="">
-            <el-input type="text" placeholder="用户名" prefix-icon="User" v-model="RegisterForm.username" />
+        <el-form
+          ref="RegisterFormRef"
+          :model="RegisterForm"
+          :rules="rules"
+          label-width="5px"
+        >
+          <el-form-item prop="userName" label="">
+            <el-input
+              type="text"
+              placeholder="用户名"
+              prefix-icon="User"
+              v-model="RegisterForm.userName"
+            />
           </el-form-item>
           <el-form-item prop="password" label="">
-            <el-input type="password" show-password placeholder="密码" prefix-icon="Lock" v-model="RegisterForm.password" />
-          </el-form-item>
-          <el-form-item prop="role">
             <el-input
-            v-model="RegisterForm.code"
+              type="password"
+              show-password
+              placeholder="密码"
+              prefix-icon="Lock"
+              v-model="RegisterForm.password"
+            />
+          </el-form-item>
+          <el-form-item prop="role" label="">
+            <el-select
+              placeholder="请选择角色"
+              style="width: 100%"
+              v-model="RegisterForm.role"
+              @change="updateRules"
+            >
+              <el-option label="个人" value="personal"></el-option>
+              <el-option label="企业" value="business"></el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 企业注册时显示的额外表单项 -->
+          <template v-if="RegisterForm.role === 'business'">
+            <el-form-item prop="companyDescription" label="">
+              <el-input
+                type="text"
+                placeholder="公司描述"
+                v-model="RegisterForm.companyDescription"
+              />
+            </el-form-item>
+          </template>
+        </el-form>
+        <div class="btn-box">
+          <button @click="registerUser">注册</button>
+          <p @click="mySwitch">已有账号?去登录</p>
+        </div>
+      </div>
+      <div class="login-form">
+        <div class="title-box">
+          <h1>登录</h1>
+        </div>
+        <el-form ref="LoginFormRef" :model="LoginForm" :rules="rules" label-width="5px">
+          <el-form-item prop="userName" label="">
+            <el-input
+              type="text"
+              placeholder="用户名"
+              prefix-icon="User"
+              v-model="LoginForm.userName"
+            />
+          </el-form-item>
+          <el-form-item prop="password" label="">
+            <el-input
+              type="password"
+              show-password
+              placeholder="密码"
+              prefix-icon="Lock"
+              v-model="LoginForm.password"
+            />
+          </el-form-item>
+          <el-form-item prop="captchaResult">
+            <el-input
+              v-model="LoginForm.captchaResult"
               type="text"
               style="width: 50%; margin-right: 10px"
               placeholder="验证码"
             />
-            <!-- <img src="captcha" > -->
+            <div
+              class="captcha"
+              style="
+                display: inline-block;
+                width: 150px;
+                height: 50px;
+                vertical-align: middle;
+              "
+            >
+              <img
+                :src="captchaUrl"
+                alt="验证码"
+                @click="fetchCaptcha"
+                style="cursor: pointer"
+              />
+            </div>
           </el-form-item>
           <el-form-item prop="role" label="">
-            <el-select  placeholder="请选择角色" style="width: 100%" v-model="RegisterForm.role" >
+            <el-select
+              placeholder="请选择角色"
+              style="width: 100%"
+              v-model="LoginForm.role"
+            >
               <el-option label="个人" value="personal"></el-option>
               <el-option label="企业" value="business"></el-option>
             </el-select>
           </el-form-item>
-         
         </el-form>
-        <!-- 按钮盒子 -->
         <div class="btn-box">
-          <button>注册</button>
-          <!-- 绑定点击事件 -->
-          <p @click="mySwitch">已有账号?去登录</p>
-        </div>
-      </div>
-      <!-- 登录盒子 -->
-      <div class="login-form">
-        <!-- 标题盒子 -->
-        <div class="title-box">
-          <h1>登录</h1>
-        </div>
-        <!-- 输入框盒子 -->
-        <el-form ref="LoginFormRef" :model="LoginForm" :rules="rules" label-width="5px">
-          <el-form-item prop="username" label="">
-            <el-input type="text" placeholder="用户名" prefix-icon="User" v-model="LoginForm.username" />
-          </el-form-item>
-          <el-form-item prop="password" label="">
-            <el-input type="password" show-password placeholder="密码" prefix-icon="Lock" v-model="LoginForm.password" />
-          </el-form-item>
-          <el-form-item prop="role" label="">
-            <el-select placeholder="请选择角色" style="width: 100%" v-model="LoginForm.role">
-              <el-option label="个人" value="personal"></el-option>
-              <el-option label="企业" value="business"></el-option>
-            </el-select>
-          </el-form-item>
-         
-        </el-form>
-        <!-- 按钮盒子 -->
-        <div class="btn-box">
-          <button>登录</button>
-          <!-- 绑定点击事件 -->
+          <button @click="loginUser">登录</button>
           <p @click="mySwitch">没有账号?去注册</p>
         </div>
       </div>
@@ -83,44 +129,175 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, watch, onMounted } from "vue";
 import { preRef, preBoxStyle, mySwitch, imgList, flag } from "../utils/mySwitch";
+import axios from "../api/request"; // 引入封装好的 axios 实例
+import { useUserStore } from "@/stores/user";
+import { ElForm } from "element-plus";
+import type { FormRules } from "element-plus";
+import { ElMessage } from "element-plus";
+import router from "@/router";
+const userStore = useUserStore();
 
-const RegisterFormRef = ref('')
-const LoginFormRef = ref('')
+const RegisterFormRef = ref<InstanceType<typeof ElForm> | null>(null);
+const LoginFormRef = ref<InstanceType<typeof ElForm> | null>(null);
 
 const LoginForm = reactive({
-  username: '',
-  password: '',
-  role: ''
-})
+  userName: "",
+  password: "",
+  captchaResult: "",
+  role: "",
+});
 
 const RegisterForm = reactive({
-  username: '',
-  password: '',
-  code: '',
-  role: ''
-})
+  userName: "",
+  password: "",
+  role: "",
+  companyDescription: "",
+});
 
-const rules = reactive({
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 2, message: '长度应大于2', trigger: 'blur' },
+// 表单验证规则
+const rules = reactive<FormRules>({
+  userName: [
+    { required: true, message: "请输入用户名", trigger: "blur" },
+    { min: 2, message: "长度应大于2", trigger: "blur" },
   ],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '长度应为6位及以上', trigger: 'blur' },
+    { required: true, message: "请输入密码", trigger: "blur" },
+    { min: 6, message: "长度应为6位及以上", trigger: "blur" },
   ],
-  role: [
-    {
-      required: true,
-      message: '请选择角色',
-      trigger: 'change',
-    }],
-})
+  role: [{ required: true, message: "请选择角色", trigger: "change" }],
+});
 
+const businessRules: FormRules = {
+  companyDescription: [{ required: true, message: "请输入公司描述", trigger: "blur" }],
+};
 
+// 更新验证规则
+const updateRules = () => {
+  if (RegisterForm.role === "business") {
+    Object.assign(rules, businessRules);
+  } else {
+    for (const key in businessRules) {
+      delete rules[key];
+    }
+  }
+};
 
+// 动态更新表单验证规则
+watch(
+  () => RegisterForm.role,
+  (newRole) => {
+    updateRules();
+  }
+);
+
+// 注册用户
+const registerUser = async () => {
+  if (RegisterFormRef.value) {
+    await RegisterFormRef.value.validate(async (valid: boolean) => {
+      if (valid) {
+        try {
+          const url =
+            RegisterForm.role === "business" ? "/company/register" : "/personal/register";
+          // 使用原生的 axios.post 方法
+          const response = await axios.post(url, RegisterForm);
+          console.log("注册成功:", response);
+          ElMessage({
+            message: "注册成功！",
+            type: "success",
+          });
+          // 保存用户角色
+    userStore.setUserRole(RegisterForm.role);
+          // 根据角色处理不同的逻辑
+          if (RegisterForm.role === "business") {
+            // 企业逻辑
+          } else {
+            // 个人逻辑
+          }
+          // 根据需要可以添加跳转或提示
+        } catch (error) {
+          console.error("注册失败:", error);
+          ElMessage.error("注册失败！");
+        }
+      } else {
+        ElMessage.error("表单验证失败！");
+        console.log("表单验证失败");
+      }
+    });
+  }
+};
+
+const captchaUrl = ref<string>(""); // 用于存储验证码图片的 URL
+
+// 获取验证码
+const fetchCaptcha = async () => {
+  try {
+    // 直接使用 Axios 进行请求
+    const response = await axios.get("/login/captcha", {
+      responseType: "blob", // 需要以 blob 形式接收图片数据
+    });
+
+    console.log("验证码请求成功:", response); // 调试信息
+
+    // 确保 response.data 是 Blob 类型
+    if (response.data instanceof Blob) {
+      captchaUrl.value = URL.createObjectURL(response.data); // 将 blob 数据转换为 URL
+    } else {
+      throw new Error("响应数据不是 Blob 类型");
+    }
+  } catch (error) {
+    console.error("验证码请求失败:", error);
+    ElMessage.error("验证码请求失败！");
+  }
+};
+
+// 在组件加载时获取验证码
+onMounted(() => {
+  fetchCaptcha();
+});
+
+// 登录用户
+const loginUser = async () => {
+  if (LoginFormRef.value) {
+    await LoginFormRef.value.validate(async (valid: boolean) => {
+      if (valid) {
+        try {
+          // 使用原生的 axios.post 方法
+          const response = await axios.post("/login", LoginForm);
+          console.log("登录成功:", response);
+          ElMessage({
+            message: "登录成功！",
+            type: "success",
+          });
+          // 保存用户角色
+    userStore.setUserRole(LoginForm.role);
+
+          // JWT 存在 response.data 中
+          const token = response;
+          // 将 JWT 保存到 sessionStorage 中
+          const tokenString = typeof token === "string" ? token : String(token);
+          window.localStorage.setItem("token", tokenString);
+
+          // 根据角色处理不同的逻辑
+          if (LoginForm.role === "business") {
+            // 企业逻辑
+          } else {
+            // 个人逻辑
+          }
+           // 跳转到首页
+    router.push('/front');
+          // 根据需要可以添加跳转或提示
+        } catch (error) {
+          console.error("登录失败:", error);
+          ElMessage.error("登录失败！");
+        }
+      } else {
+        console.log("表单验证失败");
+      }
+    });
+  }
+};
 </script>
 
 <style scoped>
@@ -331,7 +508,6 @@ span {
   text-shadow: 4px 4px 3px rgba(0, 0, 0, 0.1);
 }
 
-
 /* 输入框盒子 */
 .el-form {
   display: flex;
@@ -369,13 +545,13 @@ button {
   line-height: 30px;
   border: none;
   border-radius: 4px;
-  background-color: #69b3f3;
+  background-color: #6772e5;
   color: white;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #3588df;
+  background: #7795f8;
 }
 
 /* 按钮下面的文字 */

@@ -1,5 +1,6 @@
 <template>
-  <!-- 头部 -->
+  <div class="total">
+   <!-- 头部 -->
 <div class="header">
     <el-menu
       :default-active="null"
@@ -26,12 +27,13 @@
         <template #title style="padding-right: 50px">
           <span class="product-title">产品</span>
         </template>
-        <el-menu-item class="menu" index="2-1">简历解析</el-menu-item>
+        <el-menu-item class="menu"  index="2-1" >简历解析</el-menu-item>
         <el-menu-item class="menu" index="2-2">简历润色</el-menu-item>
         <el-menu-item class="menu"  index="2-3">岗位推荐</el-menu-item>
         <el-menu-item class="menu" index="2-4">发布招聘信息</el-menu-item>
-        <el-menu-item class="menu" index="2-5">人才搜索</el-menu-item>
-        <el-menu-item class="menu" index="2-6">简历大数据</el-menu-item>
+        <el-menu-item class="menu" index="2-5">候选人画像</el-menu-item>
+        <el-menu-item class="menu" index="2-6">人才搜索</el-menu-item>
+        <el-menu-item class="menu" index="2-7">简历大数据</el-menu-item>
       </el-sub-menu>
 
       <el-button index="3" class="btn" @click="$router.push('/login')">登录/注册</el-button>
@@ -61,6 +63,9 @@
   <div>
     <router-view></router-view>
   </div>
+  
+  </div>
+
 </template>
 
 
@@ -71,6 +76,14 @@
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+
+import { computed, onMounted } from 'vue';
+import { useUserStore } from '@/stores/user';
+import { rolesPermissions } from '../utils/rolesPermissions';
+const userStore = useUserStore();
+const userRole = computed(() => userStore.userRole);
+
+
 
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
@@ -86,21 +99,42 @@ const handleSelect = (key: string, keyPath: string[]) => {
   if (key === "2-2") {
     router.push("/polish");
   }
-  if (key === "2-5") {
-    router.push("/searchData");
+  if (key === "2-4") {
+    router.push("/recruitForm");
   }
-   if (key === "2-6") {
+     if (key === "2-5") {
+    router.push("/Portrait");
+  }
+  if (key === "2-6") {
+    router.push("/search");
+  }
+   if (key === "2-7") {
     router.push("/PersonForm");
   }
+  
 };
 // 退出登录
 function logout() {
   localStorage.removeItem("xm-user");
   router.push("/front");
 }
+
+const hasPermission = (permission: string) => {
+  if (!userRole.value) return false;
+  return rolesPermissions[userRole.value].includes(permission);
+};
 </script>
 
 <style scoped>
+.total{
+height: 100vh; /* 视口高度 */
+background-image: url('../assets/img/pink.png'); 
+background-size: cover;
+background-position: center;
+ background-repeat: no-repeat;
+}
+
+
 .menu {
       transition: color .1s cubic-bezier(.645,.045,.355,1), border-color .1s cubic-bezier(.645,.045,.355,1), background .1s cubic-bezier(.645,.045,.355,1), padding .15s cubic-bezier(.645,.045,.355,1);
     border-top: 2px solid transparent;
@@ -183,4 +217,5 @@ function logout() {
   border-radius: 8px;
   height: 45px;
 }
+
 </style>

@@ -1,37 +1,57 @@
 <template>
   <div class="form">
-  <h1>发布招聘信息</h1>
-   <div class="form-container">
-    <h2>招聘信息填写表单</h2>
-    <el-form ref="formRef" :model="form" label-width="120px" class="job-form">
-      <el-form-item label="岗位名称：">
-        <el-input v-model="form.positionName"></el-input>
-      </el-form-item>
-      <el-form-item label="岗位描述：">
-        <el-input type="textarea" v-model="form.positionDescription"></el-input>
-      </el-form-item>
-      <el-form-item label="薪资范围：">
-      </el-form-item>
-      <el-form-item label="最低薪资：">
-        <el-input type="number" v-model.number="form.salaryMin"></el-input>
-      </el-form-item>
-      <el-form-item label="最高薪资：">
-        <el-input type="number" v-model.number="form.salaryMax"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm">提交</el-button>
-        <el-button type="secondary" @click="resetForm">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <h1>发布招聘信息</h1>
+    <div class="form-container">
+      <h2>招聘信息填写表单</h2>
+      <el-form
+        ref="formRef"
+        :model="form"
+        label-width="120px"
+        class="job-form"
+      >
+        <el-form-item label="岗位名称：">
+          <el-input v-model="form.positionName"></el-input>
+        </el-form-item>
+        <el-form-item label="岗位描述：">
+          <el-input
+            type="textarea"
+            v-model="form.positionDescription"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="薪资范围："> </el-form-item>
+        <el-form-item label="最低薪资：">
+          <el-input
+            type="number"
+            v-model.number="form.salaryMin"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="最高薪资：">
+          <el-input
+            type="number"
+            v-model.number="form.salaryMax"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="submitForm"
+            >提交</el-button
+          >
+          <el-button
+            type="secondary"
+            @click="resetForm"
+            >重置</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
-  </div>
- 
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
-import axios from 'axios';
-import { ElMessage } from 'element-plus';
+import { defineComponent, reactive, ref } from 'vue'
+import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
 export default defineComponent({
   name: 'JobForm',
@@ -41,62 +61,63 @@ export default defineComponent({
       positionDescription: '',
       salaryMin: '',
       salaryMax: '',
-    });
+    })
 
-    const formRef = ref<HTMLElement | null>(null);
+    const formRef = ref<HTMLElement | null>(null)
 
     const submitForm = async () => {
       try {
-        const response = await axios.post('/api/job', form);
+        // TODO 自己改成封装的调用
+        const response = await axios.post('/api/job', form)
         ElMessage({
           message: '表单提交成功！',
           type: 'success',
           offset: 20,
           duration: 3000, // Adjust duration if needed
-        });
-        console.log('Form submitted successfully:', response.data);
+        })
+        console.log('Form submitted successfully:', response.data)
       } catch (error) {
         ElMessage({
           message: '表单提交失败，请稍后再试。',
           type: 'error',
           offset: 20,
           duration: 3000, // Adjust duration if needed
-        });
-        console.error('Error submitting form:', error);
+        })
+        console.error('Error submitting form:', error)
       }
-    };
+    }
 
     const resetForm = () => {
       if (formRef.value) {
-        (formRef.value as any).resetFields();
+        ;(formRef.value as any).resetFields()
         ElMessage({
           message: '表单已重置。',
           type: 'info',
           offset: 20,
           duration: 3000, // Adjust duration if needed
-        });
+        })
       }
-    };
+    }
 
     return {
       form,
       submitForm,
       resetForm,
       formRef,
-    };
+    }
   },
-});
+})
 </script>
 
 <style scoped>
-.form{
+.form {
   background-image: url('../assets/img/background.png');
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: center; /* 水平居中 */
-  align-items: center;     /* 垂直居中 */
-  height: 100vh;           /* 使容器占满整个视口高度 */
+  align-items: center; /* 垂直居中 */
+  height: 100vh; /* 使容器占满整个视口高度 */
   margin: 0 auto;
 }
 .form-container {
@@ -106,7 +127,7 @@ export default defineComponent({
   border: 1px solid #ced4da;
   border-radius: 8px;
   padding: 18px;
-  top:50%;
+  top: 50%;
   text-align: center;
 }
 
@@ -124,10 +145,9 @@ h2 {
   margin-bottom: 35px;
   font-size: 30px; /* Adjust heading font size if needed */
 }
-::v-deep h2{
-  color:#32325d;
-    padding-top:15px;
-
+::v-deep h2 {
+  color: #32325d;
+  padding-top: 15px;
 }
 
 /* Set global font size to 14px */
@@ -141,41 +161,38 @@ body {
 }
 
 ::v-deep .el-form-item {
-  padding-right:20px;
+  padding-right: 20px;
 }
 /* Using ::v-deep to penetrate the scoped style boundary and modify Element Plus styles */
 ::v-deep .el-form-item__label {
   font-weight: bold; /* Make labels bold */
-  color:black;
-  font-size:15px;
+  color: black;
+  font-size: 15px;
 }
 
 ::v-deep .el-input,
 ::v-deep .el-button,
 ::v-deep .el-textarea__inner {
   font-size: 15px; /* Adjust form font size */
-  margin-bottom:15px;
+  margin-bottom: 15px;
 }
 
 /* Specific styles to adjust sizes if needed */
 ::v-deep .el-input {
   width: 100%;
-  
 }
 
 ::v-deep .el-button {
   width: auto; /* Adjust button width */
-  margin-top:15px;
-
+  margin-top: 15px;
 }
-::v-deep .el-button:nth-child(1){
-background-color:#6772E5;
-margin-right:40px;
+::v-deep .el-button:nth-child(1) {
+  background-color: #6772e5;
+  margin-right: 40px;
 }
-::v-deep .el-button:nth-child(1):hover{
+::v-deep .el-button:nth-child(1):hover {
   background-color: #7795f8;
 }
-
 </style>
 
 <style>

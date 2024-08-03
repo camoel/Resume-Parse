@@ -28,3 +28,17 @@ export const login = async (params: ILoginParams) => {
   if (res.status === 200) return res.data
   return null
 }
+
+// 类型自己补充
+export const formResume = async (params: any) => {
+  const res = await post('/resumes/formResume', params)
+  if (res.status === 200) return res.data
+  return null
+}
+
+// 下面的自己仿造着写吧
+export const analysis = async (params: any) => {
+  const res = await post('/resume/analysis', params)
+  if (res.status === 200) return res.data
+  return null
+}

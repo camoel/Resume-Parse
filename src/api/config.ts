@@ -1,4 +1,4 @@
-// src/utils/.js
+// src/api/config.js
 
 import Service from "./request";
 

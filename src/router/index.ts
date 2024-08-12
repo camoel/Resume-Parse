@@ -65,6 +65,11 @@ const router = createRouter({
           path:'/testForm',
           name:'TestForm',
           component:()=>import('../components/TestForm.vue')
+        },
+        {
+          path:'/bigData',
+          name:'BigData',
+          component:()=>import('../views/company/BigData.vue')
         }
     ]})
     

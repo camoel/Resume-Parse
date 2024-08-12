@@ -35,7 +35,6 @@ server: {
         changeOrigin: true,
         rewrite: (path) =>{
           const newPath = path.replace(/^\/api/, '') // 可选：重写路径
-      console.log(`Rewriting path from ${path} to ${newPath}`)  // 在终端输出日志
           return newPath}
       },
     },

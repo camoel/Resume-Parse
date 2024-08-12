@@ -5,7 +5,7 @@
         <img src="../../assets/logo.png" alt="logo" />
         <h1>智能人才搜索</h1>
       </div>
-      <input type="text" v-model="inputValue" @keydown.enter="showData" />
+      <input type="text" v-model="positionName" @keydown.enter="showData" />
       <div class="suggestion">
         <div class="rolling-div">
           <div class="rolling-text">热门搜索：</div>
@@ -18,14 +18,16 @@
       </div>
     </div>
   </div>
-  <SearchData v-else />
+  <SearchData v-else :results="results" />
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import SearchData from "./SearchData.vue";
+import { ElMessage } from "element-plus";
+import axios from "../../api/request";
 
-const inputValue = ref("");
+const positionName = ref("");
 const items = [
   '人力资源经理',
   '酒店大堂经理',
@@ -37,7 +39,7 @@ const items = [
 ];
 const currentIndex = ref(0);
 let interval: number;
-
+const results=ref<any[]>([])
 const startRolling = () => {
   interval = window.setInterval(() => {
     currentIndex.value = (currentIndex.value + 1) % items.length;
@@ -54,12 +56,37 @@ onUnmounted(() => {
 
 const dataShow = ref(false);
 
-function showData() {
-  if (inputValue.value.trim() !== "") {
-    dataShow.value = true;
+async function showData() {
+  if (positionName.value.trim() !== "") {
+    try {
+      const response = await axios.post('/company/matching', 
+        {
+          positionName: positionName.value
+        
+      });
+      // Assuming the response data contains the results you need
+      results.value = response.data.data;  // Adjust this based on the actual structure of the response
+
+      dataShow.value = true;
+      ElMessage({
+        showClose: true,
+        message: '搜索成功！',
+        type: 'success',
+      });
+      console.log("搜索成功！");
+    } catch (error) {
+      ElMessage({
+        showClose: true,
+        message: '搜索失败！',
+        type: 'error',
+      });
+      console.log("搜索失败！");
+    }
   }
 }
 </script>
+
+
 <style scoped>
 .container {
   width: 100%;

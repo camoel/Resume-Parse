@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
-import axios from 'axios';
+import axios from '../../api/request';
 import { ElMessage } from 'element-plus';
 
 export default defineComponent({
@@ -47,22 +47,22 @@ export default defineComponent({
 
     const submitForm = async () => {
       try {
-        const response = await axios.post('/api/job', form);
+        const response = await axios.post('/company/position/release', form);
         ElMessage({
           message: '表单提交成功！',
           type: 'success',
           offset: 20,
-          duration: 3000, // Adjust duration if needed
+          duration: 12000, 
         });
-        console.log('Form submitted successfully:', response.data);
+        console.log('表单提交成功:', response.data);
       } catch (error) {
         ElMessage({
           message: '表单提交失败，请稍后再试。',
           type: 'error',
           offset: 20,
-          duration: 3000, // Adjust duration if needed
+          duration: 12000, 
         });
-        console.error('Error submitting form:', error);
+        console.error('表单提交失败:', error);
       }
     };
 

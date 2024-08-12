@@ -27,13 +27,13 @@
         <template #title style="padding-right: 50px">
           <span class="product-title">产品</span>
         </template>
-        <el-menu-item class="menu"  index="2-1" >简历解析</el-menu-item>
-        <el-menu-item class="menu" index="2-2">简历润色</el-menu-item>
-        <el-menu-item class="menu"  index="2-3">岗位推荐</el-menu-item>
-        <el-menu-item class="menu" index="2-4">发布招聘信息</el-menu-item>
-        <el-menu-item class="menu" index="2-5">候选人画像</el-menu-item>
-        <el-menu-item class="menu" index="2-6">人才搜索</el-menu-item>
-        <el-menu-item class="menu" index="2-7">简历大数据</el-menu-item>
+        <el-menu-item class="menu" v-if="userRole === 'personal' || !isLoggedIn" index="2-1" >简历解析</el-menu-item>
+        <el-menu-item class="menu" v-if="userRole === 'personal' || !isLoggedIn" index="2-2">简历润色</el-menu-item>
+        <el-menu-item class="menu" v-if="userRole === 'personal' || !isLoggedIn"  index="2-3">岗位推荐</el-menu-item>
+        <el-menu-item class="menu" v-if="userRole === 'business' || !isLoggedIn" index="2-4">发布招聘信息</el-menu-item>
+        <el-menu-item class="menu" v-if="userRole === 'business' || !isLoggedIn" index="2-5">候选人画像</el-menu-item>
+        <el-menu-item class="menu" v-if="userRole === 'business' || !isLoggedIn" index="2-6">人才搜索</el-menu-item>
+        <el-menu-item class="menu" v-if="userRole === 'business' || !isLoggedIn" index="2-7">简历大数据</el-menu-item>
       </el-sub-menu>
 
       <el-button index="3" class="btn" @click="$router.push('/login')">登录/注册</el-button>
@@ -74,14 +74,13 @@
 
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
-
-const router = useRouter();
-
 import { computed, onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
-import { rolesPermissions } from '../utils/rolesPermissions';
+
+const router = useRouter();
 const userStore = useUserStore();
 const userRole = computed(() => userStore.userRole);
+const isLoggedIn = computed(() => userStore.isLoggedIn);
 
 
 
@@ -109,7 +108,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
     router.push("/search");
   }
    if (key === "2-7") {
-    router.push("/PersonForm");
+    router.push("/BigData");
   }
   
 };
@@ -119,10 +118,7 @@ function logout() {
   router.push("/front");
 }
 
-const hasPermission = (permission: string) => {
-  if (!userRole.value) return false;
-  return rolesPermissions[userRole.value].includes(permission);
-};
+
 </script>
 
 <style scoped>

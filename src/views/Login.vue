@@ -137,8 +137,10 @@ import { ElForm } from "element-plus";
 import type { FormRules } from "element-plus";
 import { ElMessage } from "element-plus";
 import router from "@/router";
-const userStore = useUserStore();
+import type { UserRole } from "../stores/type";
 
+
+const userStore = useUserStore();
 const RegisterFormRef = ref<InstanceType<typeof ElForm> | null>(null);
 const LoginFormRef = ref<InstanceType<typeof ElForm> | null>(null);
 
@@ -146,15 +148,17 @@ const LoginForm = reactive({
   userName: "",
   password: "",
   captchaResult: "",
-  role: "",
+  role: ""as UserRole,
 });
 
 const RegisterForm = reactive({
   userName: "",
   password: "",
-  role: "",
+  role: ""as UserRole,
   companyDescription: "",
 });
+
+
 
 // 表单验证规则
 const rules = reactive<FormRules>({

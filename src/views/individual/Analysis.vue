@@ -15,7 +15,7 @@
             @change="handleFileChange"
             style="display: none"
             id="fileInput"
-            accept=".pdf" 
+            accept=".pdf"
           />
           <div>
             <svg
@@ -48,7 +48,11 @@
               width="200"
               height="200"
             >
-              <path d="M0 0h1024v1024H0z" fill="#FFFFFF" p-id="20995"></path>
+              <path
+                d="M0 0h1024v1024H0z"
+                fill="#FFFFFF"
+                p-id="20995"
+              ></path>
               <path
                 d="M859.008 980.608H164.992a34.56 34.56 0 0 1-34.56-34.56V77.952a34.56 34.56 0 0 1 34.56-34.56H614.4a34.304 34.304 0 0 1 23.808 9.472L883.2 285.696a34.432 34.432 0 0 1 10.752 25.6v634.752a34.56 34.56 0 0 1-34.944 34.56zM199.552 911.36h624.896V325.632L600.32 112.64H199.552z"
                 fill="#7B85E8"
@@ -66,16 +70,31 @@
               ></path>
             </svg>
           </div>
-          <p v-if="!selectedFile" class="p1">点击&nbsp;或&nbsp;拖拽</p>
-          <p v-if="!selectedFile" class="p2">即可上传PDF简历文件</p>
-          <p v-if="selectedFile" class="file-name">{{ selectedFile.name }}</p>
+          <p
+            v-if="!selectedFile"
+            class="p1"
+          >
+            点击&nbsp;或&nbsp;拖拽
+          </p>
+          <p
+            v-if="!selectedFile"
+            class="p2"
+          >
+            即可上传PDF简历文件
+          </p>
+          <p
+            v-if="selectedFile"
+            class="file-name"
+          >
+            {{ selectedFile.name }}
+          </p>
         </div>
       </div>
 
       <div class="bottom">
         <button
           class="common-button"
-          :class="{'common-button-disabled': !selectedFile}"
+          :class="{ 'common-button-disabled': !selectedFile }"
           @click="uploadFile"
         >
           开始解析
@@ -99,61 +118,61 @@
 </template>
 
 <script setup>
-import PersonForm from "@/components/PersonForm.vue";
-import { ref } from "vue";
-import axios from "../../api/request";
-import { ElMessage } from "element-plus"; // 引入 ElMessage 组件
+import PersonForm from '@/components/PersonForm.vue'
+import { ref } from 'vue'
+import axios from '../../api/request'
+import { ElMessage } from 'element-plus' // 引入 ElMessage 组件
 
-const selectedFile = ref(null);
-const formShow = ref(false);
+const selectedFile = ref(null)
+const formShow = ref(false)
 
 function handleClick() {
-  document.getElementById("fileInput").click();
+  document.getElementById('fileInput').click()
 }
 
 function handleDragOver(e) {
-  e.preventDefault();
+  e.preventDefault()
 }
 
 function handleDrop(e) {
-  e.preventDefault();
-  const file = e.dataTransfer.files[0];
+  e.preventDefault()
+  const file = e.dataTransfer.files[0]
   if (file && file.type === 'application/pdf') {
-    selectedFile.value = file;
+    selectedFile.value = file
   } else {
     ElMessage({
       showClose: true,
       message: '请选择一个 PDF 文件！',
       type: 'warning',
-    });
+    })
   }
 }
 
 function handleFileChange(e) {
-  const file = e.target.files[0];
+  const file = e.target.files[0]
   if (file && file.type === 'application/pdf') {
-    selectedFile.value = file;
+    selectedFile.value = file
   } else {
     ElMessage({
       showClose: true,
       message: '请选择一个 PDF 文件！',
       type: 'warning',
-    });
+    })
   }
 }
 
 function showForm() {
-  formShow.value = true;
+  formShow.value = true
 }
 
 function hoverHandler(event) {
-  const button = event.target;
-  button.style.transform = "translateX(5px)";
+  const button = event.target
+  button.style.transform = 'translateX(5px)'
 }
 
 function hoverHandlerLeave(event) {
-  const button = event.target;
-  button.style.transform = "translateX(0)";
+  const button = event.target
+  button.style.transform = 'translateX(0)'
 }
 
 async function uploadFile() {
@@ -162,42 +181,40 @@ async function uploadFile() {
       showClose: true,
       message: '请先选择一个文件',
       type: 'warning',
-    });
-    return;
+    })
+    return
   }
 
-  const formData = new FormData();
-  formData.append('file', selectedFile.value);
+  const formData = new FormData()
+  formData.append('file', selectedFile.value)
 
   try {
+    // TODO 自己改成封装的调用
     const response = await axios.post('/resumes/upload', formData, {
       headers: {
-        'Authorization': 'JWT ' + localStorage.getItem('token'), // 假设 JWT 存储在 localStorage 中
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+        Authorization: 'JWT ' + localStorage.getItem('token'), // 假设 JWT 存储在 localStorage 中
+        'Content-Type': 'multipart/form-data',
+      },
+    })
 
     ElMessage({
       showClose: true,
       message: '文件上传成功！',
       type: 'success',
-    });
-    console.log('文件上传成功:', response.data);
+    })
+    console.log('文件上传成功:', response.data)
   } catch (error) {
     ElMessage({
       showClose: true,
       message: '文件上传失败！',
       type: 'error',
-    });
-    console.error('文件上传失败:', error);
+    })
+    console.error('文件上传失败:', error)
   }
 }
 </script>
 
-
 <style scoped>
-
-
 .file-name {
   color: #32325d;
 }
@@ -301,7 +318,8 @@ button:hover {
   height: 50px;
   line-height: 50px;
   padding: 0 20px;
-  -webkit-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
+    0 1px 3px rgba(0, 0, 0, 0.08);
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   background: #fff;
   border-radius: 4px;
@@ -324,7 +342,8 @@ button:hover {
   height: 50px;
   line-height: 50px;
   padding: 0 20px;
-  -webkit-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
+    0 1px 3px rgba(0, 0, 0, 0.08);
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   background: #fff;
   border-radius: 4px;
